@@ -5,6 +5,5 @@
         "AzureWebJobsDashboard": "",
         "FUNCTIONS_WORKER_RUNTIME": "dotnet",
         "CosmosDBConnection": "AccountEndpoint=https://oteam15db.documents.azure.com:443/;AccountKey=KsEF8pcuBuQtjmAOvJcnXEuRkMXnMG0jPGhbJv9vJwvKQNZJ73OBEcry9IMq3OzaEftsjYB6VNAO326wxc3Ddg==;"
-    
     }
 }

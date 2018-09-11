@@ -26,7 +26,7 @@ namespace ServerlessOpenHack
         //    //    ? (ActionResult)new OkObjectResult($"Hello, {userId}")
         //    //    : new BadRequestObjectResult("Please pass a name on the query string or in the request body");
         //}
-        [FunctionName("GetRatingsByUserID")]
+        //[FunctionName("GetRatingsByUserID")]
         public static void Run([CosmosDBTrigger(databaseName: "ToDoItems",
             collectionName: "Items",
             ConnectionStringSetting = "CosmosDBConnection",
