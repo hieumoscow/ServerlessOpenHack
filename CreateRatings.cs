@@ -58,7 +58,7 @@ namespace Oteam15.Function
                     errorField = "rating value";
                           
             }
-            return new BadRequestObjectResult("meow please input valid " + errorField);
+            return new BadRequestObjectResult("meow1 please input valid " + errorField);
 
         }
 
