@@ -23,11 +23,11 @@ namespace Oteam15.Function
         }
 
         [FunctionName("CreateRatings")]
-        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]RatingData data,
+        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]Rating data,
         [CosmosDB(
                 databaseName: "Ratings",
                 collectionName: "ratings",
-                ConnectionStringSetting = "CosmosDBConnection")] IAsyncCollector<RatingData> documentsToStore, ILogger log)
+                ConnectionStringSetting = "CosmosDBConnection")] IAsyncCollector<Rating> documentsToStore, ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -35,12 +35,12 @@ namespace Oteam15.Function
             // RatingData data = JsonConvert.DeserializeObject<RatingData>(requestBody);
             string errorField = "";
             if(data != null){
-                bool productValid = await ProductIdValid(data.ProductId);
-                bool userValid = await UserIdValid(data.UserId);
-                bool ratingValid = data.Rating >= 0 && data.Rating <=5;
+                bool productValid = await ProductIdValid(data.productId.ToString());
+                bool userValid = await UserIdValid(data.userId.ToString());
+                bool ratingValid = data.rating >= 0 && data.rating <=5;
                 if( productValid && userValid && ratingValid ){
-                    data.Id = Guid.NewGuid().ToString();
-                    data.TimeStamp = DateTime.UtcNow;
+                    data.id = Guid.NewGuid();
+                    data.timestamp = DateTime.UtcNow;
 
                     try{
                         await documentsToStore.AddAsync(data);
@@ -98,17 +98,6 @@ namespace Oteam15.Function
         }
     }
 
-    public class RatingData
-    {
-        public string UserId { get; set; }
-        public string ProductId { get; set; }
-        public string LocationName { get; set; }
-        public int Rating { get; set; }
-        public string UserNotes { get; set; }
-
-        public string Id {get;set;}
-        public DateTime TimeStamp {get;set;}
-    }
 
     /*
 {
