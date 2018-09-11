@@ -16,9 +16,9 @@ namespace Oteam15.Function
         [FunctionName("GetRating")]
         public static IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ratings/{id:guid}")]HttpRequest req,
             [CosmosDB(
-                databaseName: "oteam15db",
-                collectionName: "Ratings",
-                ConnectionStringSetting = "CosmosDBConnectionString",
+                databaseName: "Ratings",
+                collectionName: "ratings",
+                ConnectionStringSetting = "CosmosDBConnection",
                 PartitionKey = "{id}",
                 Id = "{id}")]
                 //SqlQuery = "select * from Ratings r where r.id = {id}")]
