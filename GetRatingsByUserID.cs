@@ -1,9 +1,18 @@
 
 
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Documents;
+using Microsoft.Azure.Documents.Client;
+using Microsoft.Azure.Documents.Linq;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
+using Oteam15;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ServerlessOpenHack
 {
@@ -26,29 +35,39 @@ namespace ServerlessOpenHack
         //    //    ? (ActionResult)new OkObjectResult($"Hello, {userId}")
         //    //    : new BadRequestObjectResult("Please pass a name on the query string or in the request body");
         //}
+       
+        //public static void Run(  [CosmosDBTrigger(databaseName: "Ratings",
+        //    collectionName: "ratings",
+        //    ConnectionStringSetting = "CosmosDBConnection",
+        //    LeaseCollectionName = "leases",
+        //    CreateLeaseCollectionIfNotExists = true)]IReadOnlyList<Document> documents,
+        //    TraceWriter log)
+        //{
+        //    log.Info("Hi");
+        //    if (documents != null && documents.Count > 0)
+        //    {
+        //        log.Info($"Documents modified: {documents.Count}");
+        //        log.Info($"First document Id: {documents[0].Id}");
+        //    }
+        //}
         [FunctionName("GetRatingsByUserID")]
-        public static void Run([CosmosDBTrigger(databaseName: "ToDoItems",
-            collectionName: "Items",
-            ConnectionStringSetting = "CosmosDBConnection",
-            LeaseCollectionName = "leases",
-            CreateLeaseCollectionIfNotExists = true)]IReadOnlyList<Document> documents,
-             TraceWriter log)
+        public static IActionResult Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post",
+                Route = "GetRatingsByUserID/{id}")]HttpRequest req,
+            [CosmosDB("ToDoItems", "Items",
+                ConnectionStringSetting = "CosmosDBConnection",
+                SqlQuery = "select * from Ratings r where r.userId = {id}")]
+                IEnumerable<Rating> toDoItems,
+            TraceWriter log)
         {
-            if (documents != null && documents.Count > 0)
+            log.Info("C# HTTP trigger function processed a request.");
+
+            foreach (Rating toDoItem in toDoItems)
             {
-                log.Info($"Documents modified: {documents.Count}");
-                log.Info($"First document Id: {documents[0].Id}");
+                log.Info(toDoItem.userId.ToString());
             }
+            return new OkResult();
         }
     }
-    public class RatingClass
-    {
-        public string Id { get; set; }
-        public string UserId { get; set; }
-        public string ProductId { get; set; }
-        public string LocationName { get; set; }
-        public string Rating { get; set; }
-        public string UserNotes { get; set; }
-        public string Timestamp { get; set; }
-    }
+
 }
