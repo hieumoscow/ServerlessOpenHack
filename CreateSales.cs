@@ -28,7 +28,7 @@ namespace Oteam15.Function
                 databaseName: "Ratings",
                 collectionName: "sales",
                 ConnectionStringSetting = "CosmosDBConnection")] IAsyncCollector<string> documentsToStore,
-         TraceWriter log)
+         ILogger log)
         {
             //{"header":{"salesNumber":"86620caf-d74f-98c5-e842-7b041616e430","dateTime":"2018-09-12 14:33:36","locationId":"III999","locationName":"Fourth Coffee","locationAddress":"32108 18th Street","locationPostcode":"98112","totalCost":"11.97","totalTax":"1.20"},"details":[{"productId":"551a9be9-7f1c-447d-83ee-b18f5a6fb018","quantity":"3","unitCost":"3.99","totalCost":"11.97","totalTax":"1.20","productName":"Matcha Green Tea","productDescription":"Green tea ice cream is good for you because it is green."}]}
             //var eventStr = Encoding.UTF8.GetString(myEventHubMessage.Body.Array);
@@ -41,6 +41,11 @@ namespace Oteam15.Function
             // log.Info($"EnqueuedTimeUtc={enqueuedTimeUtc}");
             // log.Info($"SequenceNumber={sequenceNumber}");
             // log.Info($"Offset={offset}");
+            var instanceId = 
+                    Environment.GetEnvironmentVariable(
+                        "WEBSITE_INSTANCE_ID", 
+                        EnvironmentVariableTarget.Process);
+            log.LogInformation("CreateSalesinstanceId={instanceId}",instanceId);
             foreach (var message in myEventHubMessages)
                 await documentsToStore.AddAsync(message);
 
