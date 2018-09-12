@@ -63,7 +63,7 @@ namespace Oteam15.Function
                     var productInfoJson =  Convert(ProductInfoReader);
 
 
-            return (ActionResult)new OkObjectResult(json);
+            return (ActionResult)new OkObjectResult(orderDetailsJson);
 
         }
 
