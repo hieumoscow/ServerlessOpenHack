@@ -65,7 +65,7 @@ namespace Oteam15.Function
         private static async Task<bool> ProductIdValid(string productId){
             //https://serverlessohproduct.trafficmanager.net/api/GetProduct?productid=75542e38-563f-436f-adeb-f426f1dabb5c
             //{"productId":"75542e38-563f-436f-adeb-f426f1dabb5c","productName":"Starfruit Explosion","productDescription":"This starfruit ice cream is out of this world!"}
-            var host = "https://oteam15apim.azure-api.net/fn/GetProduct?productid=4c25613a-a3c2-4ef3-8e02-9c335eb23204";
+            var host = "https://oteam15apim.azure-api.net/fn/GetProduct?productid=";
             try {
                 if(!string.IsNullOrWhiteSpace(productId)){
                     var result = await httpClient.GetStringAsync(string.Format(host+productId));
