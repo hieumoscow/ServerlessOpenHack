@@ -4,6 +4,7 @@
         "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=oteam15storage;AccountKey=lph/QcCELqDuW08/so7WxuTKRjtulKCHAGzEIMt2VO3QhUYEq0JvRQhfjWzN/35WzUnq5tk1haoq+JOQftATVg==;EndpointSuffix=core.windows.net",
         "AzureWebJobsDashboard": "",
         "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+        "AzureStorage6": "DefaultEndpointsProtocol=https;AccountName=oteam15storage6;AccountKey=Sq+pCcb2xO/0PU4PCukHhqdhE8qrWDfdJwihH81HAEx8PJoaMaCCAXlTVKm2cWkDkRZ68T9DUMrjQ4jgyMf01A==;EndpointSuffix=core.windows.net",
         "CosmosDBConnection": "AccountEndpoint=https://oteam15db.documents.azure.com:443/;AccountKey=KsEF8pcuBuQtjmAOvJcnXEuRkMXnMG0jPGhbJv9vJwvKQNZJ73OBEcry9IMq3OzaEftsjYB6VNAO326wxc3Ddg==;"
     }
 }
