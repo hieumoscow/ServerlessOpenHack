@@ -58,14 +58,14 @@ namespace Oteam15.Function
                     errorField = "rating value";
                           
             }
-            return new BadRequestObjectResult("meow2 please input valid " + errorField);
+            return new BadRequestObjectResult("meow3 please input valid " + errorField);
 
         }
 
         private static async Task<bool> ProductIdValid(string productId){
             //https://serverlessohproduct.trafficmanager.net/api/GetProduct?productid=75542e38-563f-436f-adeb-f426f1dabb5c
             //{"productId":"75542e38-563f-436f-adeb-f426f1dabb5c","productName":"Starfruit Explosion","productDescription":"This starfruit ice cream is out of this world!"}
-            var host = "https://serverlessohproduct.trafficmanager.net/api/GetProduct?productid=";
+            var host = "https://oteam15apim.azure-api.net/oteam15fn/GetProduct?productid=";
             try {
                 if(!string.IsNullOrWhiteSpace(productId)){
                     var result = await httpClient.GetStringAsync(string.Format(host+productId));
@@ -82,7 +82,7 @@ namespace Oteam15.Function
         private static async Task<bool> UserIdValid(string userId){
             //https://serverlessohuser.trafficmanager.net/api/GetUser?userId=cc20a6fb-a91f-4192-874d-132493685376
             //{"userId":"cc20a6fb-a91f-4192-874d-132493685376","userName":"doreen.riddle","fullName":"Doreen Riddle"}
-            var host = "https://serverlessohuser.trafficmanager.net/api/GetUser?userId=";
+            var host = "https://oteam15apim.azure-api.net/oteam15fn/GetUser?userId=";
             try {
                 if(!string.IsNullOrWhiteSpace(userId)){
                     var result = await httpClient.GetStringAsync(string.Format(host+userId));
