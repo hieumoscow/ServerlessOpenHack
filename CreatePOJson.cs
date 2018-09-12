@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using CsvHelper;
 using System.Linq;
 using System.Net.Http;
+using ServerlessOpenHack.models;
+using System.Collections.Generic;
 
 namespace Oteam15.Function
 {
@@ -45,25 +47,46 @@ namespace Oteam15.Function
         }
 
         [FunctionName("CreatePOJson")]
-        public static async Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "createpojson/{id}")]HttpRequest req,
-        [Blob("data/{id}-OrderHeaderDetails.csv", FileAccess.Read,Connection = "AzureStorage6")] TextReader OrderDetailsReader,
-        [Blob("data/{id}-OrderLineItems.csv", FileAccess.Read,Connection = "AzureStorage6")] TextReader OrderItemsReader,
-        [Blob("data/{id}-ProductInformation.csv", FileAccess.Read,Connection = "AzureStorage6")] TextReader ProductInfoReader,
-//OrderLineItems, ProductInformation
-        [CosmosDB(
+        public static async Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "CreatePOJson/{id}")]HttpRequest req,
+              [Blob("data/{id}-OrderHeaderDetails.csv", FileAccess.Read, Connection = "AzureStorage6")] TextReader OrderDetailsReader,
+              [Blob("data/{id}-OrderLineItems.csv", FileAccess.Read, Connection = "AzureStorage6")] TextReader OrderItemsReader,
+              [Blob("data/{id}-ProductInformation.csv", FileAccess.Read, Connection = "AzureStorage6")] TextReader ProductInfoReader,
+              //OrderLineItems, ProductInformation
+              [CosmosDB(
                 databaseName: "Ratings",
-                collectionName: "ratings",
-                ConnectionStringSetting = "CosmosDBConnection")] IAsyncCollector<Rating> documentsToStore, ILogger log)
+                collectionName: "orders",
+                ConnectionStringSetting = "CosmosDBConnection")] IAsyncCollector<OrderDetails> documentsToStore, ILogger log)
         {
-            
+
             // https://oteam15storage6.blob.core.windows.net/data/20180912053600-OrderHeaderDetails.csv?sp=rl&st=2018-09-12T06:21:08Z&se=2018-09-13T06:21:08Z&sv=2017-11-09&sig=ptFbYvkqH0tB1xxP71KsXz9nH7XcksfIW6Tt8OCIQMU%3D&sr=b
-  
-                    var orderDetailsJson =  Convert(OrderDetailsReader);
-                    var orderItemsJson =  Convert(OrderItemsReader);
-                    var productInfoJson =  Convert(ProductInfoReader);
+
+            var orderDetailsJson = Convert(OrderDetailsReader);
+            var orderItemsJson = Convert(OrderItemsReader);
+            var productInfoJson = Convert(ProductInfoReader);
+
+            List<OrderDetails> orderDetailsList = JsonConvert.DeserializeObject<List<OrderDetails>>(orderDetailsJson);
+            List<OrderItems> orderItemsList = JsonConvert.DeserializeObject<List<OrderItems>>(orderItemsJson);
+            List<ProductInfo> productInfoList = JsonConvert.DeserializeObject<List<ProductInfo>>(productInfoJson);
+            List<string> retStrs = new List<string>();
+            foreach (var item in orderDetailsList)
+            {
+                item.orderItemList = orderItemsList.FindAll(x => {
+                    var ret = x.ponumber.Equals(item.ponumber);
+                    if (ret)
+                    {
+                        var productInfo = productInfoList.First(y => y.productid.Equals(x.productid));
+                        x.productname = productInfo.productname;
+                        x.productdescription = productInfo.productdescription;
+                    }
+                    return ret;
+                });
+
+                await documentsToStore.AddAsync(item);
+                retStrs.Add(item.ponumber);
+            }
 
 
-            return (ActionResult)new OkObjectResult(orderDetailsJson);
+            return (ActionResult)new OkObjectResult(retStrs);
 
         }
 
