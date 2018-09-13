@@ -46,7 +46,7 @@ namespace Oteam15.Function
             httpClient = new HttpClient();
         }
 
-        [FunctionName("CreatePOJson")]
+        // [FunctionName("CreatePOJson")]
         public static async Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "CreatePOJson/{id}")]HttpRequest req,
               [Blob("data/{id}-OrderHeaderDetails.csv", FileAccess.Read, Connection = "AzureStorage6")] TextReader OrderDetailsReader,
               [Blob("data/{id}-OrderLineItems.csv", FileAccess.Read, Connection = "AzureStorage6")] TextReader OrderItemsReader,
