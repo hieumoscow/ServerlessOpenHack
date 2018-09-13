@@ -50,8 +50,9 @@ namespace Oteam15.Function
                         var sentimentResp = await GetRatingScore(sd);
                         data.sentimentScore = sentimentResp.documents[0].score;
                    
+                        log.LogMetric("RatingSentiments",sentimentResp.documents[0].score);
                         await documentsToStore.AddAsync(data);
-                        //log.LogMetric("RatingSentiments",data.sentimentScore);
+                        //
                     }
                     catch(Exception e){
                         return new BadRequestObjectResult("CosmosDB error: " + e.Message);
