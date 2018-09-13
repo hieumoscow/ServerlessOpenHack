@@ -49,8 +49,9 @@ namespace Oteam15.Function
                         documents = new List<SentimentReqItem>(){new SentimentReqItem(){id=data.id.ToString(),text=data.userNotes}}};
                         var sentimentResp = await GetRatingScore(sd);
                         data.sentimentScore = sentimentResp.documents[0].score;
+
                    
-                        log.LogMetric("RatingSentiments",sentimentResp.documents[0].score);
+                        log.LogMetric("RatingSentiments",sentimentResp.documents[0].score, new Dictionary<string,object>(){{"Rating",data}});
                         await documentsToStore.AddAsync(data);
                         //
                     }
