@@ -11,5 +11,6 @@ namespace Oteam15
         public string locationName { get; set; }
         public int rating { get; set; }
         public string userNotes { get; set; }
+        public double sentimentScore{get; set;}
     }
 }

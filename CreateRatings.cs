@@ -11,6 +11,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System;
 using Microsoft.Azure.Documents.Client;
+using System.Text;
+using System.Collections.Generic;
 
 namespace Oteam15.Function
 {
@@ -43,6 +45,11 @@ namespace Oteam15.Function
                     data.timestamp = DateTime.UtcNow;
 
                     try{
+                        var sd = new SentimentReq(){
+                        documents = new List<SentimentReqItem>(){new SentimentReqItem(){id=data.id.ToString(),text=data.userNotes}}};
+                        var sentimentResp = await GetRatingScore(sd);
+                        data.sentimentScore = sentimentResp.documents[0].score;
+                   
                         await documentsToStore.AddAsync(data);
                     }
                     catch(Exception e){
@@ -62,6 +69,24 @@ namespace Oteam15.Function
 
         }
 
+
+
+        private static async Task<SentimentResp> GetRatingScore(SentimentReq sd){
+            //https://southeastasia.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment
+            var taUrl = "https://southeastasia.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment";
+            var postData = JsonConvert.SerializeObject(sd);
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, taUrl);
+            request.Content = new StringContent(postData,
+                                                Encoding.UTF8, 
+                                                "application/json");
+            request.Content.Headers.Add("Ocp-Apim-Subscription-Key","987bb1fbe0e54280b15341cfa8d45f26");
+
+            var result = await httpClient.SendAsync(request);
+            var ret = await result.Content.ReadAsAsync<SentimentResp>();
+            
+            return ret;
+        }
         private static async Task<bool> ProductIdValid(string productId){
             //https://serverlessohproduct.trafficmanager.net/api/GetProduct?productid=75542e38-563f-436f-adeb-f426f1dabb5c
             //{"productId":"75542e38-563f-436f-adeb-f426f1dabb5c","productName":"Starfruit Explosion","productDescription":"This starfruit ice cream is out of this world!"}

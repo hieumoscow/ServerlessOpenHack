@@ -18,7 +18,7 @@ namespace Oteam15.Function
 {
     public static class CreateSales
     {
-        [FunctionName("CreateSales")]
+        //[FunctionName("CreateSales")]
         // public static async Task RunAsync([EventHubTrigger("ot15eh", Connection = "EventHubConnection")] EventData myEventHubMessage, 
         // DateTime enqueuedTimeUtc, 
         // Int64 sequenceNumber,
