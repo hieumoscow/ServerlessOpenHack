@@ -23,7 +23,7 @@ namespace Oteam15.Function
         // DateTime enqueuedTimeUtc, 
         // Int64 sequenceNumber,
         // string offset,
-        public static async Task RunAsync([EventHubTrigger("ot15eh", Connection = "EventHubConnection")] string[] myEventHubMessages, 
+        public static async Task RunAsync([EventHubTrigger("oteam15eh", Connection = "EventHubConnection")] string[] myEventHubMessages, 
         [CosmosDB(
                 databaseName: "Ratings",
                 collectionName: "sales",
