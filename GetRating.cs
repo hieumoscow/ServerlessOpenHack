@@ -23,8 +23,9 @@ namespace Oteam15.Function
                 Id = "{id}")]
                 //SqlQuery = "select * from Ratings r where r.id = {id}")]
                 Rating rating,
-                TraceWriter log)
+                ILogger log)
         {
+            log.LogMetric("SampleMetric", 1.0);
             return (ActionResult)new OkObjectResult(rating);
         }
     }
